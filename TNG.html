@@ -6,6 +6,7 @@
     <title>The Next Generation School</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* General Body Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -14,6 +15,7 @@
             height: 100%;
             background: linear-gradient(135deg, #D32F2F, #1976D2); /* Red and Blue theme */
             color: white;
+            scroll-behavior: smooth; /* Smooth scrolling (for modern browsers) */
         }
 
         /* Navbar Styles */
@@ -27,7 +29,7 @@
             width: 100%;
             top: 0;
             z-index: 100;
-            margin-bottom: 20px;
+            transition: top 0.3s ease-in-out;
         }
 
         .navbar a {
@@ -43,6 +45,58 @@
             border-radius: 4px;
         }
 
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+        }
+
+        .menu-toggle div {
+            width: 30px;
+            height: 4px;
+            background-color: white;
+            margin: 5px 0;
+            transition: 0.4s;
+        }
+
+        .navbar-links {
+            display: flex;
+        }
+
+        .navbar-links a {
+            margin: 0 10px;
+        }
+
+ 
+
+        /* Hamburger menu visible only on mobile */
+        @media screen and (max-width: 768px) {
+            .navbar-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                background-color: #333;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                padding-top: 20px;
+            }
+
+            .navbar-links a {
+                padding: 10px;
+                width: 100%;
+                text-align: center;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .navbar-links.active {
+                display: flex;
+            }
+        }
+
         /* Hero Section */
         .hero {
             height: 100vh;
@@ -53,17 +107,21 @@
             text-align: center;
             background: linear-gradient(135deg, #D32F2F, #1976D2); /* Red and Blue */
             opacity: 0;
-            animation: fadeInHero 2s forwards; /* Add fade-in animation */
+            animation: fadeInHero 2s forwards;
+            padding-top: 60px; /* To ensure content isn't hidden under the navbar */
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: bold;
+            animation: fadeInText 1s forwards;
         }
 
         .hero p {
             font-size: 1.5rem;
             margin-top: 10px;
+            opacity: 0;
+            animation: fadeInText 2s forwards 0.5s;
         }
 
         .hero a {
@@ -73,6 +131,8 @@
             color: white;
             border-radius: 8px;
             text-decoration: none;
+            opacity: 0;
+            animation: fadeInText 2s forwards 1s;
         }
 
         .hero a:hover {
@@ -85,44 +145,9 @@
             }
         }
 
-        /* Make each section take up the full screen */
-        section {
-            height: 100vh; /* 100% of the viewport height */
-            padding-top: 80px; /* Adjust for the fixed navbar */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        section h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        section p, section ul {
-            font-size: 1.1rem;
-            text-align: center;
-            max-width: 80%;
-            margin-top: 20px;
-        }
-
-        /* Smooth Scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Initially hide all sections */
-        .section-content {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInSection 1s ease-in-out forwards;
-        }
-
-        @keyframes fadeInSection {
+        @keyframes fadeInText {
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
@@ -137,6 +162,16 @@
             margin: 0 auto;
         }
 
+        /* Section Styles */
+        section {
+            height: 100vh;
+            padding-top: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
         /* Gallery Grid */
         .gallery-grid {
             display: grid;
@@ -149,183 +184,187 @@
             border-radius: 10px;
         }
 
-        /* Class for when the section is in view */
-        .in-view {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
+        /* Mobile-Specific Styles */
+        @media screen and (max-width: 768px) {
+            .navbar {
+                padding: 10px 0;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .navbar a {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
         }
 
+        /* Large Desktop-Specific Styles */
+        @media screen and (min-width: 1200px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+        }
+
+        /* General Section Heading Size */
+        section h2 {
+            font-size: 2.5rem; /* Adjust the font size as per your preference */
+            animation: fadeInText 1s forwards;
+        }
+
+        /* Large Desktop-Specific Section Heading Size */
+        @media screen and (min-width: 1200px) {
+            section h2 {
+                font-size: 3.5rem; /* Larger font size for larger screens */
+            }
+        }
     </style>
+    
+    
+    
+    
 </head>
 <body>
 
+    <!-- Navbar Section -->
+    <nav class="navbar" id="navbar">
+        <div class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="navbar-links" id="navbarLinks">
+            <a href="#start">Start</a>
+            <a href="#about">About Us</a>
+            <a href="#curriculum">Curriculum</a>
+            <a href="#admissions">Admissions</a>
+            <a href="#courses">Courses</a>
+            <a href="#careers">Careers</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
+
     <!-- Hero Section -->
     <section class="hero" id="start">
-        <h1 style="color: rgb(246, 117, 139); font-size: 95px;">TNG</h1>
+        <h1 style="color: rgb(246, 117, 139); font-size: 75px;">TNG</h1>
         <h1>Welcome to The Next Generation School</h1>
         <p>Shaping Future Leaders</p>
         <a href="#about">Learn More</a>
     </section>
 
-    <!-- Navbar Section -->
-    <nav class="navbar">
-        <a href="#start">Start</a>
-        <a href="#about">About Us</a>
-        <a href="#curriculum">Curriculum</a>
-        <a href="#admissions">Admissions</a>
-        <a href="#courses">Courses</a>
-        <a href="#careers">Careers</a>
-        <a href="#gallery">Gallery</a>
-        <a href="#contact">Contact</a>
-    </nav>
-
-    <!-- About Us -->
+    <!-- About Us Section -->
     <section id="about" class="section-bg">
-        
-            <b><h2>About Us</h2></b>
-            <p style="text-align: center;">
-
-                
-                Founded in 2009, The Next Generation (TNG) School in Qatar is committed to providing quality education in a safe and positive environment. Our mission is to foster innovation, independent learning, and active participation in co-curricular and extra-curricular activities, while upholding Islamic values.<br><br>
-                
-                Our Values:<br>
-                - Quality: Striving for excellence<br>
-                - Sincerity: Genuine actions and words<br>
-                - Teamwork: Collaboration for success<br>
-                - Ambition: Aspiring to be our best<br>
-                - Respect: Treating others with kindness<br><br>
-                
-                Join us at TNG, where we turn information into knowledge and wisdom.
-                
-            </p>
-        
+        <b><h2>About Us</h2></b>
+        <p style="text-align: center;">
+            Founded in 2009, The Next Generation (TNG) School in Qatar is committed to providing quality education in a safe and positive environment. Our mission is to foster innovation, independent learning, and active participation in co-curricular and extra-curricular activities, while upholding Islamic values.<br><br>
+            Our Values:<br>
+            - Quality: Striving for excellence<br>
+            - Sincerity: Genuine actions and words<br>
+            - Teamwork: Collaboration for success<br>
+            - Ambition: Aspiring to be our best<br>
+            - Respect: Treating others with kindness<br><br>
+            Join us at TNG, where we turn information into knowledge and wisdom.
+        </p>
     </section>
 
-    <!-- Curriculum -->
+    <!-- Curriculum Section -->
     <section id="curriculum" class="section-bg">
-       
         <b><h2>Our Curriculum</h2></b>
-            <p style="text-align: center;">   
-                Curriculum
-                
-                At The Next Generation (TNG) School, we offer a comprehensive curriculum designed to challenge, stimulate, and promote critical thinking, decision-making, and problem-solving skills. As a Cambridge International School, we prepare learners for successful IGCSE and A-Level examinations with the CAIE board.<br><br>
-                
-                Our curriculum includes:<br>
-                - Core Subjects: English, Mathematics, Science, and Social Studies<br>
-                - Language Studies: Arabic and Islamic Studies<br>
-                - Technology: Computer Science and Robotics<br>
-                - Soft Skills: Leadership, teamwork, and communication<br>
-                - Qatar History: Understanding the rich heritage and culture of Qatar<br><br>
-                
-                We ensure that each learner has a wide range of learning experiences that cater to their academic and personal growth.
-            </p>
-        </div>
+        <p style="text-align: center;">
+            At The Next Generation (TNG) School, we offer a comprehensive curriculum designed to challenge, stimulate, and promote critical thinking, decision-making, and problem-solving skills. As a Cambridge International School, we prepare learners for successful IGCSE and A-Level examinations with the CAIE board.<br><br>
+            Our curriculum includes:<br>
+            - Core Subjects: English, Mathematics, Science, and Social Studies<br>
+            - Language Studies: Arabic and Islamic Studies<br>
+            - Technology: Computer Science and Robotics<br>
+            - Soft Skills: Leadership, teamwork, and communication<br>
+            - Qatar History: Understanding the rich heritage and culture of Qatar<br><br>
+            We ensure that each learner has a wide range of learning experiences that cater to their academic and personal growth.
+        </p>
     </section>
 
-    <!-- Admissions -->
+    <!-- Admissions Section -->
     <section id="admissions" class="section-bg">
-        
         <b><h2>Admissions</h2></b>
-            <p style="text-align: center;">
-           
-                
-                Required Documents:<br>
-                - Student's Qatari ID, Passport, Birth Certificate, Vaccination records, Health Card, Previous school reports<br>
-                - Parent's Qatari ID and Passport<br><br>
-                
-               
-                Admission Steps:<br>
-                1. Submit an online application with required documents.<br>
-                2. Receive confirmation and schedule an entrance test.<br>
-                3. Attend the test and await results.<br>
-                4. Complete the admission process upon successful test results.<br><br>
-                
-                For detailed information, visit our admissions page: <a href="https://tngqatar.online/index.php/admission/apply-online">https://tngqatar.online</a>
-
-                </p>
-        </div>
+        <p style="text-align: center;">
+            Required Documents:<br>
+            - Student's Qatari ID, Passport, Birth Certificate, Vaccination records, Health Card, Previous school reports<br>
+            - Parent's Qatari ID and Passport<br><br>
+            Admission Steps:<br>
+            1. Submit an online application with required documents.<br>
+            2. Receive confirmation and schedule an entrance test.<br>
+            3. Attend the test and await results.<br>
+            4. Complete the admission process upon successful test results.<br><br>
+            For detailed information, visit our admissions page: <a href="https://tngqatar.online/index.php/admission/apply-online">https://tngqatar.online</a>
+        </p>
     </section>
 
-    <!-- Courses -->
+    <!-- Courses Section -->
     <section id="courses" class="section-bg">
-       
         <b><h2>Our Courses</h2></b>
-            <p style="text-align: center;">
-At The Next Generation (TNG) School, our curriculum emphasizes critical thinking, decision-making, and problem-solving skills. Here's a brief overview:<br><br>
-                
-                Core Subjects:<br>                        
-                - English<br>
-                - Mathematics<br>
-                - Science<br>
-                - Social Studies<br><br>
-                
-                Language Studies:<br>
-                - Arabic<br>
-                - Islamic Studies<br><br>
-                
-                Technology:<br>
-                - Computer Science<br>
-                - Robotics<br><br>
-                
-                Additional Courses:<br>
-                - Qatar History
-                </p>
-        </div>
+        <p style="text-align: center;">
+            At TNG, we offer a wide range of courses that cater to different interests and learning paths. Whether you're interested in business, technology, or sciences, we have the right programs to help you grow.<br><br>
+            - Business and Economics<br>
+            - Computer Science<br>
+            - Social Sciences<br>
+            - STEM (Science, Technology, Engineering, and Math)<br>
+            - Languages: English, Arabic<br>
+            - Arts and Design<br><br>
+            Explore your passions with TNG's diverse course offerings!
+        </p>
     </section>
 
-    <!-- Careers -->
+    <!-- Careers Section -->
     <section id="careers" class="section-bg">
-        
         <b><h2>Careers</h2></b>
-            <p style="text-align: center;">
-                Join TNG School for diverse career opportunities in roles like Operations Administrator, Class Teacher, Subject Teacher, and more. Apply online by submitting the required personal, professional, and academic details.<br>
-
-                For more details and to apply, visit our careers page: <a href="https://tngqatar.online/index.php/career?form=MG0AV3">https://tngqatar.online</a>
-            </p>
-        </div>
+        <p style="text-align: center;">
+            We are constantly looking for talented and motivated professionals to join our team. If you're passionate about education and want to be a part of our dynamic community, check out our career opportunities.<br><br>
+            Current openings:<br>
+            - Teachers (Various Subjects)<br>
+            - Administrators<br>
+            - Support Staff<br><br>
+            Apply now to be a part of The Next Generation School family!
+        </p>
     </section>
 
-    <!-- Gallery -->
+    <!-- Gallery Section -->
     <section id="gallery" class="section-bg">
-        <div class="section-content">
-            <b><h2>Gallery</h2>
-            <div class="gallery-grid">
-                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=400&q=80" alt="Image 1">
-                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=80" alt="Image 2">
-                <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?q=80&w=1772&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image 3">
-                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=400&q=80" alt="Image 4">
-            </div>
+        <b><h2>Gallery</h2></b>
+        <div class="gallery-grid">
+            <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=400&q=80" alt="Image 1">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=400&q=80" alt="Image 2">
         </div>
     </section>
 
-    <!-- Contact -->
-   <!-- Contact -->
-<section id="contact" class="section-bg">
-    
-    <b><h2>Contact Us</h2></b>
-        <p>
-        <p>Address: The Next Generation School, Al Muntazah Area, Doha, Qatar</p>
-        <p>Email: info@tngqatar.com</p>
-        <p>Phone: +974 4491 2642</p>
-        <p>Fax: +974 4491 2643</p>
-        <p>More Info On: <a href="http://www.tngqatar.online" target="_blank" class="text-blue-400">www.tngqatar.online</a>
-        </p>
-        </p>
-    </div>
-</section>
-
+    <!-- Contact Section -->
+    <section id="contact" class="section-bg">
+        <b><h2>Contact Us</h2></b>
+        <p>Get in touch with us for inquiries or to schedule a visit. We're here to help!</p>
+        <p>Email: info@tngqatar.com<br>Phone: +974 1234 5678</p>
+    </section>
 
     <script>
-        // On scroll, add the 'in-view' class to sections as they appear in view
-        const sections = document.querySelectorAll('section');
+        let prevScrollPos = window.pageYOffset;
 
-        window.addEventListener('scroll', () => {
-            sections.forEach(section => {
-                if (section.getBoundingClientRect().top < window.innerHeight) {
-                    section.querySelector('.section-content').classList.add('in-view');
-                }
-            });
-        });
+        window.onscroll = function() {
+            let currentScrollPos = window.pageYOffset;
+            if (prevScrollPos > currentScrollPos) {
+                document.getElementById("navbar").style.top = "0"; // Show navbar
+            } else {
+                document.getElementById("navbar").style.top = "-60px"; // Hide navbar
+            }
+            prevScrollPos = currentScrollPos;
+        };
+
+        function toggleMenu() {
+            const navbarLinks = document.getElementById("navbarLinks");
+            navbarLinks.classList.toggle("active");
+        }
     </script>
 
 </body>
